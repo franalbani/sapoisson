@@ -3,6 +3,8 @@
 import numpy as np
 from scipy.io.wavfile import write as wavwrite
 
+# TODO: ¡¡¡se puede hacer estereo!!!
+
 MAX_INT16 = 2**15 - 1
 
 F = 44100
@@ -14,13 +16,13 @@ N = int(T * F)
 t = T * np.arange(0, N) / N
 
 sapo = (np.sin(np.pi * t / T)**4 *
-        np.sin(10 * np.pi * t / T) *
-        (np.cos(2 * np.pi * 500 * t) + 0.5 * np.cos(2 * np.pi * 1500 * t)))
+        np.sin(19 * np.pi * t / T) *
+        (np.cos(2 * np.pi * 753 * t) + 0.5 * np.cos(2 * np.pi * 753*2 * t)))
 
 D = 10
 M = int(D * F)
 
-saporsegundo = 0.7
+saporsegundo = 0.25
 
 Q = int(D * saporsegundo)
 
@@ -32,7 +34,7 @@ def randomsapo():
         ruido[k:(k + L)] += sapo[:L]
     return ruido
 
-saporhectarea = 50
+saporhectarea = 25
 H = int(1 * saporhectarea)
 rs = np.random.rand(H, 2) * 2 - 1
 
@@ -40,7 +42,7 @@ fondo = np.zeros(M)
 
 for r in rs:
     d = np.linalg.norm(r)
-    fondo += randomsapo() / (d**2)
+    fondo += randomsapo() / (0.01 + d)**2
 
 fondo /= fondo.max()
 fondo *= MAX_INT16 / 2
