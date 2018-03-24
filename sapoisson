@@ -2,6 +2,13 @@
 
 import numpy as np
 from scipy.io.wavfile import write as wavwrite
+from argparse import ArgumentParser
+
+ap = ArgumentParser()
+ap.add_argument('--duration', type=float, default=10)
+ap.add_argument('--temporal_density', type=float, default=0.25, help='How frequent a sapo sapes')
+ap.add_argument('--spatial_density', type=float, default=25, help='Sapos per hectare')
+args = ap.parse_args()
 
 # TODO: ¡¡¡se puede hacer estereo!!!
 
@@ -19,12 +26,10 @@ sapo = (np.sin(np.pi * t / T)**4 *
         np.sin(19 * np.pi * t / T) *
         (np.cos(2 * np.pi * 753 * t) + 0.5 * np.cos(2 * np.pi * 753*2 * t)))
 
-D = 10
+D = args.duration
 M = int(D * F)
 
-saporsegundo = 0.25
-
-Q = int(D * saporsegundo)
+Q = int(D * args.temporal_density)
 
 def randomsapo():
     ks = np.random.randint(M - N, size=(Q, ))
@@ -33,8 +38,7 @@ def randomsapo():
         ruido[k:(k + N)] += sapo
     return ruido
 
-saporhectarea = 25
-H = int(1 * saporhectarea)
+H = int(1 * args.spatial_density)
 rs = np.random.rand(H, 2) * 2 - 1
 
 fondo = np.zeros(M)
