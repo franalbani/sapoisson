@@ -27,11 +27,10 @@ saporsegundo = 0.25
 Q = int(D * saporsegundo)
 
 def randomsapo():
-    ks = np.random.randint(M, size=(Q, ))
+    ks = np.random.randint(M - N, size=(Q, ))
     ruido = np.zeros(M)
     for k in ks:
-        L = min(N, M-k)
-        ruido[k:(k + L)] += sapo[:L]
+        ruido[k:(k + N)] += sapo
     return ruido
 
 saporhectarea = 25
